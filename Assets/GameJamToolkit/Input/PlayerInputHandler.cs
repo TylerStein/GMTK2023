@@ -44,6 +44,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private PrioritizedList<GameObject> listeners = new PrioritizedList<GameObject>();
     public Vector2 move;
     public Vector2 look;
+    public Vector2 pointer;
     public ButtonInput fire = new ButtonInput();
     public ButtonInput pause = new ButtonInput();
 
@@ -89,6 +90,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnPause(InputAction.CallbackContext context) {
         pause.UpdateFromPhase(context.phase);
+    }
+
+    public void OnPointerPosition(InputAction.CallbackContext context)
+    {
+        pointer = context.ReadValue<Vector2>();
     }
     #endregion
 }

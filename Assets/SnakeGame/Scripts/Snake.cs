@@ -89,7 +89,7 @@ namespace SnakeGame
 
         public void OnAnyCollision(GameObject other)
         {
-            if (other.tag == gameManager.TagBorder || other.tag == gameManager.TagSnake)
+            if (/*other.tag == gameManager.TagBorder || */other.tag == gameManager.TagSnake)
             {
                 didCollide = true;
             }

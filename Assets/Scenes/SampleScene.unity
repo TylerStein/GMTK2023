@@ -255,7 +255,19 @@ MonoBehaviour:
     m_ActionId: 7165cdf1-d44e-4028-a592-fe5ff85a9165
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420034}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6b722769-6ea1-4652-99de-73c0b2668d54
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -263,7 +275,19 @@ MonoBehaviour:
     m_ActionId: 50cb93ef-3ad9-4ec8-a370-8edf73ffaa2f
     m_ActionName: Player/Pause[/Keyboard/escape,/Keyboard/p]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420034}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnPointerPosition
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 9f3ec677-22c9-4ba2-be04-db9f76eb811d
     m_ActionName: Player/PointerPosition[/Mouse/position]
   - m_PersistentCalls:
@@ -325,6 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
+  pointer: {x: 0, y: 0}
 --- !u!1 &601454367
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +855,7 @@ MonoBehaviour:
   borderDown: {fileID: 601454368}
   borderLeft: {fileID: 974452001}
   foodPrefab: {fileID: 2963351422189805945, guid: 75b247b924be0a343b4b847efe5168c6, type: 3}
+  movingFoodPrefab: {fileID: 5863464941921650629, guid: 0af6dd9a08dfbf34b861036d8d6f2843, type: 3}
   availableFood: []
   tickRate: 0.15
 --- !u!4 &1457746292
@@ -881,6 +907,9 @@ MonoBehaviour:
   inputHandler: {fileID: 519420034}
   gameManager: {fileID: 1457746291}
   character: {fileID: 1799784448}
+  movingFoodPrefab: {fileID: 0}
+  fireCooldown: 1
+  fireTimer: 0
 --- !u!114 &1799784448
 MonoBehaviour:
   m_ObjectHideFlags: 0

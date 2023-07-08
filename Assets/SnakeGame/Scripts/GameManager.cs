@@ -15,7 +15,9 @@ namespace SnakeGame
         public Transform borderRight;
         public Transform borderDown;
         public Transform borderLeft;
+
         public GameObject foodPrefab;
+        public GameObject movingFoodPrefab;
 
         public List<GameObject> availableFood;
 
@@ -75,6 +77,22 @@ namespace SnakeGame
         {
             Vector2 random = GetRandomInBounds();
             return new Vector2Int(Mathf.RoundToInt(random.x), Mathf.RoundToInt(random.y));
+        }
+
+        public void SpawnMovingFood(Vector2 origin, Vector2 direction)
+        {
+            GameObject movingFood = Instantiate(movingFoodPrefab, origin, Quaternion.identity);
+            movingFood.GetComponent<MovingFood>().direction = direction;
+            availableFood.Add(movingFood);
+        }
+
+        public bool IsInBounds(Vector2 point)
+        {
+            return
+                point.y < borderUp.position.y &&
+                point.x < borderRight.position.x &&
+                point.y > borderDown.position.y &&
+                point.x > borderLeft.position.x;
         }
 
         void SpawnFood()

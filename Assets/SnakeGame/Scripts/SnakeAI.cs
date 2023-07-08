@@ -171,7 +171,6 @@ public class SnakeAI : MonoBehaviour
             if (raycastHits[i].collider.tag == gameManager.TagSnake)
             {
                 if (raycastHits[i].collider.gameObject != snake.head.gameObject) {
-                    Debug.Log("Hit self");
                     hitSelf = true;
                 }
             }
