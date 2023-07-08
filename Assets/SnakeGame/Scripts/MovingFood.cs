@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SnakeGame
 {
-    public class MovingFood : MonoBehaviour
+    public class MovingFood : WorldObject
     {
-        public GameManager gameManager;
         public Vector2 direction;
 
-        // Start is called before the first frame update
-        void Start()
+        public void Start()
         {
-            gameManager = FindObjectOfType<GameManager>();
-            InvokeRepeating("Tick", gameManager.tickRate, gameManager.tickRate);
+            SetupTickReceiver(128);
         }
 
-        void Tick()
+        public override void OnTick(float deltaTime)
         {
-            transform.Translate(direction);
+            transform.position = new Vector3(Mathf.Round(transform.position.x + direction.x), Mathf.Round(transform.position.y + direction.y), transform.position.z); 
             if (!gameManager.IsInBounds(transform.position))
             {
-                gameManager.RemoveFood(gameObject);
+                gameManager.RemoveFood(this);
             }
+        }
+
+        public override Vector2 GetProjectedPosition(int steps)
+        {
+            return (Vector2)transform.position + (direction * steps);
         }
     }
 }

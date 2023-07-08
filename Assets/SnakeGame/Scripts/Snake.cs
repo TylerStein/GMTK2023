@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SnakeGame
 {
-    public class Snake : MonoBehaviour
+    public class Snake : WorldObject
     {
 
         public bool didEat = false;
@@ -14,30 +14,25 @@ namespace SnakeGame
 
         public Transform head;
         public GameObject tailPrefab;
-        public GameManager gameManager;
-        public LinkedList<Transform> tail = new LinkedList<Transform>();
+        public LinkedList<SnakeTail> tail = new LinkedList<SnakeTail>();
 
-        private GameObject foodToDestroy;
+        public Sprite tailSprite;
+        public Sprite bodySprite;
 
-        // Start is called before the first frame update
-        void Start()
+        private WorldObject foodToDestroy;
+
+        public void Start()
         {
-            gameManager = FindObjectOfType<GameManager>();
-            InvokeRepeating("Tick", gameManager.tickRate, gameManager.tickRate);
+            Vector3 startPosition = transform.position;
+            transform.position = Vector3.zero;
+            head.transform.position = startPosition;
+
+            SetupTickReceiver(256);
         }
 
         public void SetDirection(Vector2 dir)
         {
-            Vector2 nextDirection = direction;
-            if (dir.x != 0)
-            {
-                nextDirection = dir.x > 0 ? Vector2.right : Vector2.left;
-            }
-            else if (dir.y != 0)
-            {
-                nextDirection = dir.y > 0 ? Vector2.up : Vector2.down;
-            }
-
+            Vector2 nextDirection = SnapInput.GetSnapInput(dir, SnapInput.EInputSnap.FOUR);
             if (direction != -nextDirection)
             {
                 direction = nextDirection;
@@ -46,7 +41,7 @@ namespace SnakeGame
 
 
         // Update is called once per frame
-        void Tick()
+        public override void OnTick(float deltaTime)
         {
             if (didCollide)
             {
@@ -54,20 +49,41 @@ namespace SnakeGame
                 return;
             }
 
+            int directionValue = Direction.GetDirection(direction);
+
             Vector2 lastPosition = head.position;
-            head.Translate(direction);
+            Quaternion lastRotation = head.rotation;
+            // TODO: Track last direction
+            int lastDirectionValue = directionValue;
+
+            Quaternion directionRotation = Direction.GetRotation(directionValue);
+            head.position = head.position + (Vector3)direction;
+            head.rotation = directionRotation;
 
             bool addTailExtension = (didEat && gameManager.TryEat(foodToDestroy)) || tail.Count < initialLength;
             if (addTailExtension)
             {
-                GameObject extension = Instantiate(tailPrefab, lastPosition, Quaternion.identity, transform);
-                tail.AddFirst(extension.transform);
+                GameObject sectionObj = Instantiate(tailPrefab, lastPosition, lastRotation, transform);
+                SnakeTail section = sectionObj.GetComponent<SnakeTail>();
+                if (tail.Count == 0) {
+                    section.SetSprite(tailSprite);
+                }
+                tail.AddFirst(section);
+
+                section.snake = this;
+                section.direction = lastDirectionValue;
             }
-            if (tail.Count > 0)
+            else if (tail.Count > 0)
             {
-                tail.Last.Value.position = lastPosition;
+                tail.Last.Value.transform.position = lastPosition;
+                tail.Last.Value.transform.rotation = lastRotation;
+                tail.Last.Value.direction = lastDirectionValue;
+                tail.Last.Value.SetSprite(bodySprite);
+
                 tail.AddFirst(tail.Last.Value);
                 tail.RemoveLast();
+
+                tail.Last.Value.SetSprite(tailSprite);
             }
 
             didEat = false;
@@ -79,12 +95,12 @@ namespace SnakeGame
             didCollide = false;
             didEat = false;
             direction = Vector2.right;
-            foreach (Transform transform in tail)
+            foreach (SnakeTail snakeTail in tail)
             {
-                Destroy(transform.gameObject);
+                Destroy(snakeTail.gameObject);
             }
             tail.Clear();
-            head.position = Vector3.zero;
+            head.position = (Vector2)gameManager.GetIntRandomInBounds();
         }
 
         public void OnAnyCollision(GameObject other)
@@ -96,7 +112,7 @@ namespace SnakeGame
             else if (other.tag == gameManager.TagFood)
             {
                 didEat = true;
-                foodToDestroy = other;
+                foodToDestroy = other.GetComponent<WorldObject>();
             }
         }
     }

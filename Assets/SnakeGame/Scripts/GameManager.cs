@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SnakeGame
@@ -19,27 +20,53 @@ namespace SnakeGame
         public GameObject foodPrefab;
         public GameObject movingFoodPrefab;
 
-        public List<GameObject> availableFood;
+        public List<WorldObject> availableFood = new List<WorldObject>();
+        public PrioritizedList<WorldObject> tickReceivers = new PrioritizedList<WorldObject>();
 
-        public float tickRate = 2.0f;
+        public float tickRate = 0.15f;
 
         // Start is called before the first frame update
         void Start()
         {
             SpawnFood();
             SpawnFood();
+            SpawnFood();    
             SpawnFood();
-            SpawnFood();
-            availableFood = new List<GameObject>(GameObject.FindGameObjectsWithTag(TagFood));
+            InvokeRepeating("OnTick", tickRate, tickRate);
         }
 
-        // Update is called once per frame
-        void Update()
+        public void OnTick()
         {
-
+            for (int i = 0; i < tickReceivers.Count; i++)
+            {
+                tickReceivers.ValueAt(i).OnTick(tickRate);
+            }
         }
 
-        public bool TryEat(GameObject food)
+        public void RegisterTickReceiver(WorldObject receiver, int priority)
+        {
+            if (!tickReceivers.ContainsValue(receiver))
+            {
+                tickReceivers.Add(receiver, priority);
+            }
+        }
+
+        public void ChangeTickReceiverPriority(WorldObject receiver, int priority)
+        {
+            tickReceivers.UpdatePriority(receiver, priority);
+        }
+
+        public void UnRegisterTickReceiver(WorldObject receiver)
+        {
+            tickReceivers.Remove(receiver);
+        }
+
+        public void RegisterPlayer(CharacterPlayer player)
+        {
+            availableFood.Add(player.character);
+        }
+
+        public bool TryEat(WorldObject food)
         {
             if (!food)
             {
@@ -57,13 +84,13 @@ namespace SnakeGame
             return true;
         }
 
-        public void RemoveFood(GameObject food)
+        public void RemoveFood(WorldObject food)
         {
             int index = availableFood.IndexOf(food);
             if (index >= 0)
             {
                 availableFood.RemoveAt(index);
-                food.SetActive(false);
+                food.gameObject.SetActive(false);
                 Destroy(food);
             }
         }
@@ -83,7 +110,7 @@ namespace SnakeGame
         {
             GameObject movingFood = Instantiate(movingFoodPrefab, origin, Quaternion.identity);
             movingFood.GetComponent<MovingFood>().direction = direction;
-            availableFood.Add(movingFood);
+            availableFood.Add(movingFood.GetComponent<WorldObject>());
         }
 
         public bool IsInBounds(Vector2 point)
@@ -99,7 +126,7 @@ namespace SnakeGame
         {
             Vector2Int random = GetIntRandomInBounds();
             GameObject instance = Instantiate(foodPrefab, new Vector3(random.x, random.y, 0), Quaternion.identity);
-            availableFood.Add(instance);
+            availableFood.Add(instance.GetComponent<WorldObject>());
         }
 
     }

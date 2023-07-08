@@ -4,20 +4,30 @@ using UnityEngine;
 
 namespace SnakeGame
 {
+
     public class SnakeTail : MonoBehaviour
     {
-        Snake snake;
+        public Snake snake;
+        public int direction;
 
-        // Start is called before the first frame update
-        void Start()
+        public void Awake()
         {
-            snake = FindObjectOfType<Snake>();
+            if (!snake)
+            {
+                snake = GetComponentInParent<Snake>();
+            }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        //public void SetPositionAndRotation(Vector2 position, int direction, Quaternion rotation)
+        //{
+        //    transform.position = position;
+        //    this.direction = direction;
+        //    transform.rotation = rotation;
+        //}
 
+        public void SetSprite(Sprite sprite)
+        {
+            GetComponent<SpriteRenderer>().sprite = sprite;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

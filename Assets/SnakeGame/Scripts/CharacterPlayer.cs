@@ -16,6 +16,7 @@ namespace SnakeGame
         void Start()
         {
             gameManager = FindObjectOfType<GameManager>();
+            gameManager.RegisterPlayer(this);
             fireTimer = fireCooldown;
         }
 
@@ -28,14 +29,14 @@ namespace SnakeGame
             }
 
             Vector2 movement = inputHandler.move;
-            Vector2 adjustedMovement = SnapInput.GetSnapInput(movement, SnapInput.EInputSnap.DPAD);
+            Vector2 adjustedMovement = SnapInput.GetSnapInput(movement, SnapInput.EInputSnap.FOUR);
             character.SetMove(adjustedMovement);
 
             bool fire = inputHandler.fire.downThisFrame;
             if (fire && fireTimer >= fireCooldown)
             {
                 Vector3 pointerWorld = Camera.main.ScreenToWorldPoint(inputHandler.pointer);
-                Vector2 direction = SnapInput.GetSnapInput((pointerWorld - transform.position).normalized, SnapInput.EInputSnap.DPAD);
+                Vector2 direction = SnapInput.GetSnapInput((pointerWorld - transform.position).normalized, SnapInput.EInputSnap.FOUR);
                 gameManager.SpawnMovingFood((Vector2)transform.position + direction, direction);
                 fireTimer = 0;
             }
