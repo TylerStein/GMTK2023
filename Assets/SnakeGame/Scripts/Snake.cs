@@ -10,6 +10,7 @@ namespace SnakeGame
         public bool didEat = false;
         public bool didCollide = false;
         public Vector2 direction = Vector2.right;
+        public int initialLength = 1;
 
         public Transform head;
         public GameObject tailPrefab;
@@ -56,15 +57,11 @@ namespace SnakeGame
             Vector2 lastPosition = head.position;
             head.Translate(direction);
 
-            if (didEat)
+            bool addTailExtension = (didEat && gameManager.TryEat(foodToDestroy)) || tail.Count < initialLength;
+            if (addTailExtension)
             {
                 GameObject extension = Instantiate(tailPrefab, lastPosition, Quaternion.identity, transform);
                 tail.AddFirst(extension.transform);
-                didEat = false;
-                foodToDestroy.SetActive(false);
-                Destroy(foodToDestroy);
-                foodToDestroy = null;
-                gameManager.OnSnakeEat();
             }
             if (tail.Count > 0)
             {
@@ -72,6 +69,9 @@ namespace SnakeGame
                 tail.AddFirst(tail.Last.Value);
                 tail.RemoveLast();
             }
+
+            didEat = false;
+            foodToDestroy = null;
         }
 
         void ResetSnake()
@@ -89,12 +89,11 @@ namespace SnakeGame
 
         public void OnAnyCollision(GameObject other)
         {
-            Debug.Log("Collision with object: " + other.name);
-            if (other.tag == "Death" || other.tag == "Player")
+            if (other.tag == gameManager.TagBorder || other.tag == gameManager.TagSnake)
             {
                 didCollide = true;
             }
-            else if (other.tag == "Pickup")
+            else if (other.tag == gameManager.TagFood)
             {
                 didEat = true;
                 foodToDestroy = other;
