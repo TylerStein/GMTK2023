@@ -47,8 +47,15 @@ public class SnakeAI : MonoBehaviour
                 CheckAndSetDirection(Vector2.up);
             } else if (targetOffset.y < 0)
             {
-                // behind snake, turn right
-                CheckAndSetDirection(Vector2.right);
+                if (targetOffset.x < 0)
+                {
+                    // behind snake, turn ccw
+                    CheckAndSetDirection(Vector2.right);
+                } else
+                {
+                    // behind snake, turn cw (default)
+                    CheckAndSetDirection(Vector2.left);
+                }
             } else if (targetOffset.x > 0)
             {
                 // to the right of snake
@@ -69,8 +76,16 @@ public class SnakeAI : MonoBehaviour
             }
             else if (targetOffset.y > 0)
             {
-                // behind snake, turn left
-                CheckAndSetDirection(Vector2.left);
+                if (targetOffset.x > 0)
+                {
+                    // behind snake, turn ccw
+                    CheckAndSetDirection(Vector2.right);
+                }
+                else
+                {
+                    // behind snake, turn cw (default)
+                    CheckAndSetDirection(Vector2.left);
+                }
             } else if (targetOffset.x > 0)
             {
                 // to the right of the snake
@@ -101,8 +116,16 @@ public class SnakeAI : MonoBehaviour
             }
             else
             {
-                // behind snake, turn down
-                CheckAndSetDirection(Vector2.down);
+                if (targetOffset.y > 0)
+                {
+                    // behind snake, turn ccw
+                    CheckAndSetDirection(Vector2.up);
+                }
+                else
+                {
+                    // behind snake, turn cw (default)
+                    CheckAndSetDirection(Vector2.down);
+                }
             }
         }
         else
@@ -120,8 +143,16 @@ public class SnakeAI : MonoBehaviour
             }
             else if (targetOffset.x > 0)
             {
-                // behind snake, turn up
-                CheckAndSetDirection(Vector2.up);
+                if (targetOffset.y > 0)
+                {
+                    // behind snake, turn ccw
+                    CheckAndSetDirection(Vector2.down);
+                }
+                else
+                {
+                    // behind snake, turn cw (default)
+                    CheckAndSetDirection(Vector2.up);
+                }
             }
             else
             {
