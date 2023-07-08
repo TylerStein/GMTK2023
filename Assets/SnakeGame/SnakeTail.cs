@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SnakeV2
+namespace SnakeGame
 {
-    public class SnakeTailColliderV2 : MonoBehaviour
+    public class SnakeTail : MonoBehaviour
     {
-        SnakeControllerV2 controller;
+        Snake snake;
 
         // Start is called before the first frame update
         void Start()
         {
-            controller = FindObjectOfType<SnakeControllerV2>();
+            snake = FindObjectOfType<Snake>();
         }
 
         // Update is called once per frame
@@ -22,12 +22,12 @@ namespace SnakeV2
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            controller.OnAnyCollision(collision.gameObject);
+            snake.OnAnyCollision(collision.gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            controller.OnAnyCollision(collision.gameObject);
+            snake.OnAnyCollision(collision.gameObject);
         }
     }
 }

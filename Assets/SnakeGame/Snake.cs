@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SnakeV2
+namespace SnakeGame
 {
-    public class SnakeControllerV2 : MonoBehaviour
+    public class Snake : MonoBehaviour
     {
-        public Transform borderUp;
-        public Transform borderRight;
-        public Transform borderDown;
-        public Transform borderLeft;
-        public GameObject foodPrefab;
-
-        public PlayerInputHandler inputHandler;
 
         public bool didEat = false;
         public bool didCollide = false;
@@ -20,6 +13,7 @@ namespace SnakeV2
 
         public Transform head;
         public GameObject tailPrefab;
+        public GameManager manager;
 
         public LinkedList<Transform> tail = new LinkedList<Transform>();
         public float tickRate = 2.0f;
@@ -32,32 +26,28 @@ namespace SnakeV2
         void Start()
         {
             InvokeRepeating("Tick", tickRate, tickRate);
-
-            SpawnFood();
-            SpawnFood();
-            SpawnFood();
-            SpawnFood();
         }
 
-        void Update()
+        public void SetDirection(Vector2 target)
         {
-            int moveX = Mathf.RoundToInt(inputHandler.move.x);
-            int moveY = Mathf.RoundToInt(inputHandler.move.y);
-
             Vector2 nextDirection = direction;
-            if (moveX != 0)
+            if (target.x != 0)
             {
-                nextDirection = moveX > 0 ? Vector2.right : Vector2.left;
+                nextDirection = target.x > 0 ? Vector2.right : Vector2.left;
             }
-            else if (moveY != 0)
+            else if (target.y != 0)
             {
-                nextDirection = moveY > 0 ? Vector2.up : Vector2.down;
+                nextDirection = target.y > 0 ? Vector2.up : Vector2.down;
             }
 
             if (direction != -nextDirection)
             {
                 direction = nextDirection;
             }
+        }
+
+        void Update()
+        {
         }
 
         // Update is called once per frame
@@ -80,7 +70,7 @@ namespace SnakeV2
                 foodToDestroy.SetActive(false);
                 Destroy(foodToDestroy);
                 foodToDestroy = null;
-                SpawnFood();
+                manager.OnSnakeEat();
             }
             if (tail.Count > 0)
             {
@@ -103,13 +93,6 @@ namespace SnakeV2
             }
             tail.Clear();
             head.position = Vector3.zero;
-        }
-
-        void SpawnFood()
-        {
-            int x = Mathf.RoundToInt(Random.Range(borderLeft.position.x, borderRight.position.x));
-            int y = Mathf.RoundToInt(Random.Range(borderDown.position.y, borderUp.position.y));
-            Instantiate(foodPrefab, new Vector3(x, y, 0), Quaternion.identity);
         }
 
         public void OnAnyCollision(GameObject other)
