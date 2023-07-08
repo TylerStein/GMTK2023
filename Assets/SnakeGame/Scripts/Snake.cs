@@ -13,31 +13,28 @@ namespace SnakeGame
 
         public Transform head;
         public GameObject tailPrefab;
-        public GameManager manager;
-
+        public GameManager gameManager;
         public LinkedList<Transform> tail = new LinkedList<Transform>();
-        public float tickRate = 2.0f;
-
-        public List<GameObject> observedFood = new List<GameObject>();
 
         private GameObject foodToDestroy;
 
         // Start is called before the first frame update
         void Start()
         {
-            InvokeRepeating("Tick", tickRate, tickRate);
+            gameManager = FindObjectOfType<GameManager>();
+            InvokeRepeating("Tick", gameManager.tickRate, gameManager.tickRate);
         }
 
-        public void SetDirection(Vector2 target)
+        public void SetDirection(Vector2 dir)
         {
             Vector2 nextDirection = direction;
-            if (target.x != 0)
+            if (dir.x != 0)
             {
-                nextDirection = target.x > 0 ? Vector2.right : Vector2.left;
+                nextDirection = dir.x > 0 ? Vector2.right : Vector2.left;
             }
-            else if (target.y != 0)
+            else if (dir.y != 0)
             {
-                nextDirection = target.y > 0 ? Vector2.up : Vector2.down;
+                nextDirection = dir.y > 0 ? Vector2.up : Vector2.down;
             }
 
             if (direction != -nextDirection)
@@ -46,9 +43,6 @@ namespace SnakeGame
             }
         }
 
-        void Update()
-        {
-        }
 
         // Update is called once per frame
         void Tick()
@@ -70,7 +64,7 @@ namespace SnakeGame
                 foodToDestroy.SetActive(false);
                 Destroy(foodToDestroy);
                 foodToDestroy = null;
-                manager.OnSnakeEat();
+                gameManager.OnSnakeEat();
             }
             if (tail.Count > 0)
             {
@@ -78,8 +72,6 @@ namespace SnakeGame
                 tail.AddFirst(tail.Last.Value);
                 tail.RemoveLast();
             }
-
-            observedFood = new List<GameObject>(GameObject.FindGameObjectsWithTag("Pickup"));
         }
 
         void ResetSnake()
@@ -106,14 +98,6 @@ namespace SnakeGame
             {
                 didEat = true;
                 foodToDestroy = other;
-            }
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            foreach (GameObject food in observedFood)
-            {
-                Gizmos.DrawLine(head.position, food.transform.position);
             }
         }
     }

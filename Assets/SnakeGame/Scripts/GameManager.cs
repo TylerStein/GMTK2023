@@ -12,6 +12,8 @@ namespace SnakeGame
         public Transform borderLeft;
         public GameObject foodPrefab;
 
+        public float tickRate = 2.0f;
+
         // Start is called before the first frame update
         void Start()
         {
