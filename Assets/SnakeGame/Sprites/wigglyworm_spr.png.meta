@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2138cc7cb65ba5d43a68503579f0b463
+guid: aab9703c642cafc4298fc96cba5c4df1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,13 +105,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bug_walk_spr_0
+      name: wigglyworm_spr_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 16
-        height: 16
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +119,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 601562970736cd04ab7a8b2d94ff8f0c
-      internalID: -1088847707
+      spriteID: bcf82f73ec61d9c42a5e7cc304ff09d2
+      internalID: 308913827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bug_walk_spr_1
+      name: wigglyworm_spr_1
       rect:
         serializedVersion: 2
         x: 16
         y: 0
         width: 16
-        height: 16
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 70b7dfad6481d154fb96691e0fced6cd
-      internalID: -1791740674
+      spriteID: 3d0af72670db2e94c9c6ea3da6d429a4
+      internalID: -987000682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bug_walk_spr_2
+      name: wigglyworm_spr_2
       rect:
         serializedVersion: 2
         x: 32
         y: 0
         width: 16
-        height: 16
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,20 +161,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e1b1004421b473438bb6cfbf0b17cea
-      internalID: 194517506
+      spriteID: f0792004214dc5e43b5203604f6ecda7
+      internalID: -601781342
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bug_walk_spr_3
+      name: wigglyworm_spr_3
       rect:
         serializedVersion: 2
         x: 48
         y: 0
         width: 16
-        height: 16
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,8 +182,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a1d81b7ac3568c94399139510d1abe3d
-      internalID: -413543663
+      spriteID: 3a1fdc92da53ab441ab8dffa48426f6c
+      internalID: -1314498077
       vertices: []
       indices: 
       edges: []
@@ -199,10 +199,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bug_walk_spr_0: -1088847707
-      bug_walk_spr_1: -1791740674
-      bug_walk_spr_2: 194517506
-      bug_walk_spr_3: -413543663
+      wigglyworm_spr_0: 308913827
+      wigglyworm_spr_1: -987000682
+      wigglyworm_spr_2: -601781342
+      wigglyworm_spr_3: -1314498077
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
