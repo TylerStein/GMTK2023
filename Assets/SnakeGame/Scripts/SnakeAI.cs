@@ -27,7 +27,8 @@ namespace SnakeGame
                 closestFood = gameManager.availableFood[0];
                 // Vector2 foodPosition = closestFood.transform.position;
                 // float manhattanDistance = Distance.ManhattanDistance(foodPosition.x, headPosition.x, foodPosition.y, headPosition.y);
-                //Vector2 projectedPosition = closestFood.GetProjectedPosition(Mathf.RoundToInt(manhattanDistance));
+                // Vector2 projectedPosition = closestFood.GetProjectedPosition(3);
+                // Debug.DrawLine(headPosition, projectedPosition, Color.green, deltaTime);
                 moveToTarget = closestFood.transform.position;
             }
             else
