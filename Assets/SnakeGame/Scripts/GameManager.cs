@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 namespace SnakeGame
 {
     public class GameManager : MonoBehaviour
     {
+        public TextMeshProUGUI timerText;
+        public float timer;
+
         public string TagSnake = "Snake";
         public string TagFood = "Food";
         public string TagPlayer = "Player";
@@ -33,6 +37,9 @@ namespace SnakeGame
             SpawnFood();    
             SpawnFood();
             InvokeRepeating("OnTick", tickRate, tickRate);
+
+            timer = 0;
+            timerText.text = Mathf.Round(timer).ToString();
         }
 
         public void OnTick()
@@ -41,6 +48,9 @@ namespace SnakeGame
             {
                 tickReceivers.ValueAt(i).OnTick(tickRate);
             }
+
+            timer += tickRate;
+            timerText.text = Mathf.Round(timer).ToString();
         }
 
         public void RegisterTickReceiver(WorldObject receiver, int priority)
