@@ -13,7 +13,7 @@ namespace SnakeGame
         public Vector2 direction = Vector2.right;
         public int lastDirectionValue = Direction.RIGHT;
         public int initialLength = 1;
-
+        public bool shouldReset = false;
 
         public Transform head;
         public GameObject tailPrefab;
@@ -47,7 +47,7 @@ namespace SnakeGame
         // Update is called once per frame
         public override void OnTick(float deltaTime)
         {
-            if (didCollide)
+            if (didCollide || shouldReset)
             {
                 ResetSnake();
                 return;
@@ -121,10 +121,11 @@ namespace SnakeGame
             lastDirectionValue = directionValue;
         }
 
-        void ResetSnake()
+        private void ResetSnake()
         {
             didCollide = false;
             didEat = false;
+            shouldReset = false;
             direction = Vector2.right;
             foreach (SnakeTail snakeTail in tail)
             {
@@ -140,7 +141,7 @@ namespace SnakeGame
             {
                 didCollide = true;
             }
-            else if (other.tag == gameManager.TagFood)
+            else if (other.tag == gameManager.TagFood || other.tag == gameManager.TagPlayer)
             {
                 didEat = true;
                 foodToDestroy = other.GetComponent<WorldObject>();

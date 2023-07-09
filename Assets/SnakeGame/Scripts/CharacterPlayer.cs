@@ -13,6 +13,7 @@ namespace SnakeGame
         public float fireTimer = 0;
 
         public bool enableFire = true;
+        public bool shouldReset = false;
 
         // Start is called before the first frame update
         void Start()
@@ -25,6 +26,12 @@ namespace SnakeGame
         // Update is called once per frame
         void Update()
         {
+            if (shouldReset)
+            {
+                ResetPlayer();
+                return;
+            }
+
             if (fireTimer < fireCooldown)
             {
                 fireTimer = Mathf.Clamp(fireTimer + Time.deltaTime, 0, fireCooldown);
@@ -42,6 +49,14 @@ namespace SnakeGame
                 gameManager.SpawnMovingFood((Vector2)transform.position + direction, direction);
                 fireTimer = 0;
             }
+        }
+
+        private void ResetPlayer()
+        {
+            fireTimer = 0;
+            transform.position = Vector2.zero;
+            character.SetMove(Vector2.zero);
+            shouldReset = false;
         }
     }
 }

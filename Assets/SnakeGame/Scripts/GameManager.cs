@@ -9,7 +9,9 @@ namespace SnakeGame
     public class GameManager : MonoBehaviour
     {
         public TextMeshProUGUI timerText;
+        public TextMeshProUGUI highScoreText;
         public float timer;
+        public float highScore;
 
         public string TagSnake = "Snake";
         public string TagFood = "Food";
@@ -27,11 +29,17 @@ namespace SnakeGame
         public List<WorldObject> availableFood = new List<WorldObject>();
         public PrioritizedList<WorldObject> tickReceivers = new PrioritizedList<WorldObject>();
 
+        public Snake snake;
+        public CharacterPlayer player;
+
         public float tickRate = 0.15f;
 
         // Start is called before the first frame update
         void Start()
         {
+            snake = FindObjectOfType<Snake>();
+            player = FindObjectOfType<CharacterPlayer>();
+
             SpawnFood();
             SpawnFood();
             SpawnFood();    
@@ -40,6 +48,7 @@ namespace SnakeGame
 
             timer = 0;
             timerText.text = Mathf.Round(timer).ToString();
+            highScoreText.text = Mathf.Round(highScore).ToString();
         }
 
         public void OnTick()
@@ -50,7 +59,12 @@ namespace SnakeGame
             }
 
             timer += tickRate;
+            if (timer > highScore)
+            {
+                highScore = timer;
+            }
             timerText.text = Mathf.Round(timer).ToString();
+            highScoreText.text = Mathf.Round(highScore).ToString();
         }
 
         public void RegisterTickReceiver(WorldObject receiver, int priority)
@@ -85,7 +99,11 @@ namespace SnakeGame
 
             if (food.name == "Player")
             {
-                // RespawnPlayer();
+                player.shouldReset = true;
+                snake.shouldReset = true;
+                timer = 0;
+
+
                 return false;
             }
 
