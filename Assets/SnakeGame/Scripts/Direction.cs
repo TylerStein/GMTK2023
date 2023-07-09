@@ -14,19 +14,13 @@ namespace SnakeGame
 
         public static int GetDirection(Vector2 input)
         {
-            float dot = Vector2.Dot(Vector2.up, input);
-            if (dot > 45)
+            if (Mathf.Abs(input.y) > Mathf.Abs(input.x))
             {
-                return UP;
-            } else if (dot < -45)
+                return input.y >= 0 ? UP : DOWN;
+            }
+            else
             {
-                return DOWN;
-            } else if (input.x > 0)
-            {
-                return RIGHT;
-            } else
-            {
-                return LEFT;
+                return input.x >= 0 ? RIGHT : LEFT;
             }
         }
 
@@ -36,9 +30,9 @@ namespace SnakeGame
             switch (direction)
             {
                 case UP: return Quaternion.Euler(0f, 0f, 0f);
-                case RIGHT: return Quaternion.Euler(0f, 0f, 90f);
+                case RIGHT: return Quaternion.Euler(0f, 0f, -90f);
                 case DOWN: return Quaternion.Euler(0f, 0f, 180f);
-                case LEFT: return Quaternion.Euler(0f, 0f, 270f);
+                case LEFT: return Quaternion.Euler(0f, 0f, 90f);
             }
 
             return Quaternion.identity;

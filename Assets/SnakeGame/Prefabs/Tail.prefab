@@ -147,4 +147,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snake: {fileID: 0}
-  direction: 0

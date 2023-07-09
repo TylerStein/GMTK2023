@@ -17,7 +17,10 @@ namespace SnakeGame
         {
             this.move = move;
             int direction = Direction.GetDirection(move);
-            transform.rotation = Direction.GetRotation(direction);
+            if (move.x != 0 || move.y != 0)
+            {
+                transform.rotation = Direction.GetRotation(direction);
+            }
         }
 
         public override void OnTick(float deltaTime)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 
 namespace SnakeGame
 {
@@ -10,7 +11,9 @@ namespace SnakeGame
         public bool didEat = false;
         public bool didCollide = false;
         public Vector2 direction = Vector2.right;
+        public int lastDirectionValue = Direction.RIGHT;
         public int initialLength = 1;
+
 
         public Transform head;
         public GameObject tailPrefab;
@@ -18,6 +21,7 @@ namespace SnakeGame
 
         public Sprite tailSprite;
         public Sprite bodySprite;
+        public Sprite turnSprite;
 
         private WorldObject foodToDestroy;
 
@@ -53,8 +57,6 @@ namespace SnakeGame
 
             Vector2 lastPosition = head.position;
             Quaternion lastRotation = head.rotation;
-            // TODO: Track last direction
-            int lastDirectionValue = directionValue;
 
             Quaternion directionRotation = Direction.GetRotation(directionValue);
             head.position = head.position + (Vector3)direction;
@@ -71,23 +73,52 @@ namespace SnakeGame
                 tail.AddFirst(section);
 
                 section.snake = this;
-                section.direction = lastDirectionValue;
+                int fromDirection = tail.Count > 1
+                    ? tail.First.Next.Value.toDirection
+                    : lastDirectionValue;
+                int toDirection = directionValue;
+                if (fromDirection != toDirection)
+                {
+                    section.SetSprite(turnSprite);
+                } else
+                {
+                    section.SetSprite(bodySprite);
+                }
+                section.SetDirection(fromDirection, toDirection);
             }
             else if (tail.Count > 0)
             {
-                tail.Last.Value.transform.position = lastPosition;
-                tail.Last.Value.transform.rotation = lastRotation;
-                tail.Last.Value.direction = lastDirectionValue;
-                tail.Last.Value.SetSprite(bodySprite);
-
                 tail.AddFirst(tail.Last.Value);
                 tail.RemoveLast();
 
-                tail.Last.Value.SetSprite(tailSprite);
+                // configure last piece behind head
+                LinkedListNode<SnakeTail> first = tail.First;
+
+                int fromDirection = tail.Count > 1
+                    ? first.Next.Value.toDirection
+                    : lastDirectionValue;
+                int toDirection = directionValue;
+                if (fromDirection != toDirection)
+                {
+                    first.Value.SetSprite(turnSprite);
+                }
+                else
+                {
+                    first.Value.SetSprite(bodySprite);
+                }
+                first.Value.transform.position = lastPosition;
+                first.Value.SetDirection(fromDirection, toDirection);
+
+                // tail copies direction of last sprite it's attached to
+                LinkedListNode<SnakeTail> last = tail.Last;
+                fromDirection = tail.Count > 1 ? last.Previous.Value.fromDirection : directionValue;
+                last.Value.SetSprite(tailSprite);
+                last.Value.SetDirection(fromDirection, fromDirection);
             }
 
             didEat = false;
             foodToDestroy = null;
+            lastDirectionValue = directionValue;
         }
 
         void ResetSnake()

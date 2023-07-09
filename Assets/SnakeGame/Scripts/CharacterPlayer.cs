@@ -12,6 +12,8 @@ namespace SnakeGame
         public float fireCooldown = 3;
         public float fireTimer = 0;
 
+        public bool enableFire = true;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -32,7 +34,7 @@ namespace SnakeGame
             Vector2 adjustedMovement = SnapInput.GetSnapInput(movement, SnapInput.EInputSnap.FOUR);
             character.SetMove(adjustedMovement);
 
-            bool fire = inputHandler.fire.downThisFrame;
+            bool fire = enableFire && inputHandler.fire.downThisFrame;
             if (fire && fireTimer >= fireCooldown)
             {
                 Vector3 pointerWorld = Camera.main.ScreenToWorldPoint(inputHandler.pointer);
